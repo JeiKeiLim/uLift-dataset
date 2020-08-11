@@ -36,14 +36,17 @@
 
 ## 1.3 Dataset description
 <img src="https://raw.githubusercontent.com/JeiKeiLim/mygifcontainer/master/workout_dataset_gifs/dataset_description.png"/>
-1. Total session number : 158
-2. Workout segments : 2,355
-3. Rest segments : 2,552
-4. Total repetition number : 23,738
-5. Average session number per a participant : 4
-6. Total collection time : 40 Hours
-7. Total workout collection time : 14 Hours
-8. Total rest collection time : 26 Hours
+
+|||
+|-|-|
+|1. Total session number| 158 |
+|2. Workout segments|2,355|
+|3. Rest segments|2,552|
+|4. Total repetition number|23,738|
+|5. Average session number per a participant|4 sessions|
+|6. Total collection time|40 Hours|
+|7. Total workout collection time|14 Hours|
+|8. Total rest collection time|26 Hours|
 
 # 2. Structure description
 ## 2.1 Directory Structure
