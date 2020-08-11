@@ -1,4 +1,6 @@
-# Workout Dataset
+# uLift dataset loader
+
+* This document is out-dated. Most information will remain correct, however, some needs to be updated.
 
 # Classes
 ## SensorData
