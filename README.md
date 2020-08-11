@@ -15,21 +15,24 @@
 4. Segmented data for each workout and rest
 
 ## 1.2 Collected Workout Name and Class Number
-<pre><code>00 - SQUAT
-01 - PUSH_UP
-02 - LUNGE
-03 - JUMPING_JACK
-04 - BENCH_PRESS
-05 - GOOD_MORNING
-06 - DEAD_LIFT
-07 - PUSH_PRESS
-08 - BACK_SQUAT
-09 - ARM_CURL
-10 - BB_MILITARY_PRESS
-11 - BB_BENT_OVER_ROW
-12 - BURPEE
-13 - LEG_RAISED_CRUNCH
-14 - LATERAL_RAISE</code></pre>
+|Class Number|Workout Name|
+|------------|------------|
+|00|SQUAT|
+|01|PUSH_UP|
+|02|LUNGE|
+|03|JUMPING_JACK|
+|04|BENCH_PRESS|
+|05|GOOD_MORNING|
+|06|DEAD_LIFT|
+|07|PUSH_PRESS|
+|08|BACK_SQUAT|
+|09|ARM_CURL|
+|10|BB_MILITARY_PRESS|
+|11|BB_BENT_OVER_ROW|
+|12|BURPEE|
+|13|LEG_RAISED_CRUNCH|
+|14|LATERAL_RAISE|
+
 
 ## 1.3 Dataset description
 <img src="https://raw.githubusercontent.com/JeiKeiLim/mygifcontainer/master/workout_dataset_gifs/dataset_description.png"/>
@@ -44,8 +47,8 @@
 
 # 2. Structure description
 ## 2.1 Directory Structure
-
-<pre><code>(01) 	|-- uLift_sensor_dataset
+```
+(01) 	|-- uLift_sensor_dataset
 (02) 		|-- nickname
 (03) 			|-- nickname_year_date_time_whole.csv
 (04) 			|-- nickname_year_date_time_whole.info
@@ -53,8 +56,13 @@
 (06) 			|-- nickname_year_date_time_number_(0 to 14).info
 (07) 			|-- nickname_year_date_time_number_rest.csv
 (08) 			|-- nickname_year_date_time_number_rest.info
-(09) 	|-- scripts
-(10) 		|-- Matlab script files</code></pre>
+(09) 	|-- docs
+(10) 		|-- Documentation files
+(09) 	|-- dataset_loader
+(10) 		|-- python dataset loader
+(09) 	|-- matlab_scripts
+(10) 		|-- Matlab script files
+```
 
 > **(01 - 02)** - uLift\_sensor\_dataset/nickname
 >> - Contains sensor dataset
