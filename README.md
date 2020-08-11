@@ -58,10 +58,10 @@
 (08) 			|-- nickname_year_date_time_number_rest.info
 (09) 	|-- docs
 (10) 		|-- Documentation files
-(09) 	|-- dataset_loader
-(10) 		|-- python dataset loader
-(09) 	|-- matlab_scripts
-(10) 		|-- Matlab script files
+(11) 	|-- dataset_loader
+(12) 		|-- python dataset loader
+(13) 	|-- matlab_scripts
+(14) 		|-- Matlab script files
 ```
 
 > **(01 - 02)** - uLift\_sensor\_dataset/nickname
@@ -83,7 +83,13 @@
 >> - ***number***
 >>> - Ascending order number of rest
 
-> **(09 - 10)** - scripts
+> **(09 - 10)** - docs
+>> - Documentation files
+
+> **(11 - 12)** - dataset_loader
+>> - python dataset loader. Automatically reads all datasets for further analysis.
+
+> **(13 - 14)** - scripts
 >> - Matlab scripts for fine adjustment of annotation (video dataset is required)
 
 
