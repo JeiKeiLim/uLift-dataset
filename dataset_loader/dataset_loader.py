@@ -1,7 +1,6 @@
 import pandas as pd
 import os
 import numpy as np
-from util import MyLogger
 from tqdm import tqdm
 from p_tqdm import p_map
 from functools import partial
@@ -69,7 +68,7 @@ class SensorData:
         return self.get_x() - self.get_x()[0]
 
     def print_user_info(self):
-        MyLogger.i("NickName : ", self.user_nick_name, ", "
+        print("NickName : ", self.user_nick_name, ", "
                                                        "WorkoutExperience : ", self.user_workout_experience, "month, ",
                    "Gender : ", self.user_gender, ", BirthYear : ", self.user_birth_year, ", "
                                                                                           "Weight : ", self.user_weight,
@@ -78,15 +77,15 @@ class SensorData:
     def print_path(self):
 
         if issubclass(type(self), WorkoutSegment):
-            MyLogger.i("WORKOUT!!!")
+            print("WORKOUT!!!")
         elif issubclass(type(self), RestSegment):
-            MyLogger.i("REST!!!")
+            print("REST!!!")
         elif issubclass(type(self), WholeSession):
-            MyLogger.i("WHOLE!!")
+            print("WHOLE!!")
 
-        MyLogger.i('csv :', self.csv_path)
-        MyLogger.i(self.raw_data.head())
-        MyLogger.i(self.sampling_rate)
+        print('csv :', self.csv_path)
+        print(self.raw_data.head())
+        print(self.sampling_rate)
 
 
 class WorkoutSegment(SensorData):
@@ -101,7 +100,7 @@ class WorkoutSegment(SensorData):
         del self.info_not_processed
 
     def print_workout_info(self):
-        MyLogger.i(self.info_path, "::", self.workout_class_number, ":", self.workout_class_name, " :: ",
+        print(self.info_path, "::", self.workout_class_number, ":", self.workout_class_name, " :: ",
                    self.repetition_number, sep="")
 
 
@@ -130,7 +129,7 @@ class WholeSession(SensorData):
             sensor_annotate = self.annotate_data.loc[sensor_index]["SensorIndex"]
 
             if verbose > 3:
-                MyLogger.d("Sensor data annotation", sensor_annotate, is_workout, self.file_name,
+                print("Sensor data annotation", sensor_annotate, is_workout, self.file_name,
                            self.raw_data["Timestamp"].iloc[sensor_index], is_workout)
 
             if sensor_annotate == -1 and not is_workout:
@@ -164,7 +163,7 @@ class WholeSession(SensorData):
 
     def print_workout_class_info(self):
         for info in self.workout_class_info:
-            MyLogger.i(info)
+            print(info)
 
 
 class SessionData:
@@ -218,7 +217,7 @@ class DataSetLoader:
         self.verbose = verbose
 
         if verbose > 0:
-            MyLogger.i("Start loading dataset from", path, "...")
+            print("Start loading dataset from", path, "...")
 
         files_info = self.get_files_info()
         merged_info = DataSetLoader.merge_file_info(files_info)
@@ -237,7 +236,7 @@ class DataSetLoader:
 
         self.datasets = []
         if self.verbose > 0:
-            MyLogger.i("... Reading {} datasets from {} subjects ...".format(len(merged_info), len(self.unique_names)))
+            print("... Reading {} datasets from {} subjects ...".format(len(merged_info), len(self.unique_names)))
 
         loading_infos = [info for info in merged_info if info[0][2].lower() in self.unique_names]
         loading_msg = "Reading {} datasets from {} subjects ...".format(len(merged_info), len(self.unique_names))
@@ -248,7 +247,7 @@ class DataSetLoader:
             self.datasets = [SessionData(info, verbose=verbose) for info in tqdm(loading_infos, desc=loading_msg)]
 
         if self.verbose > 0:
-            MyLogger.i("... Done Reading {} datasets from {} subjects!".format(len(self.datasets), len(self.unique_names)))
+            print("... Done Reading {} datasets from {} subjects!".format(len(self.datasets), len(self.unique_names)))
 
         # Dropping the session data that does not contain every 15 workout types
         if drop_lack_workout_type:
@@ -262,8 +261,8 @@ class DataSetLoader:
                     drop_candidate.append(d_set)
 
             if self.verbose > 0:
-                MyLogger.i("... Drop Dataset :", len(drop_candidate))
-                MyLogger.i("... Current length :", len(self.datasets))
+                print("... Drop Dataset :", len(drop_candidate))
+                print("... Current length :", len(self.datasets))
 
             for d_set in drop_candidate:
                 sinner_list = ""
@@ -271,14 +270,14 @@ class DataSetLoader:
 
                 for w_data in d_set.workout_segments:
                     sinner_list += "%d," % w_data.workout_class_number
-                MyLogger.i(sinner_list)
+                print(sinner_list)
                 self.datasets.remove(d_set)
 
             if self.verbose > 0:
-                MyLogger.i("... Current length :", len(self.datasets))
+                print("... Current length :", len(self.datasets))
 
         if verbose > 0:
-            MyLogger.i("Done reading dataset!")
+            print("Done reading dataset!")
 
     def get_training_test_sets(self, cv_idx=0, n_cv=6):
         n_test = (len(self.unique_names) // n_cv)
@@ -296,8 +295,8 @@ class DataSetLoader:
                     training_set.append(d_set)
 
         if self.verbose > 0:
-            MyLogger.i("Testing index : %s" % test_idx)
-            MyLogger.i("Training, Testing Length : (%02d, %02d)" % (len(training_set), len(test_set)))
+            print("Testing index : %s" % test_idx)
+            print("Training, Testing Length : (%02d, %02d)" % (len(training_set), len(test_set)))
 
         return training_set, test_set
 
