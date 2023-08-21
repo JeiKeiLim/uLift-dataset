@@ -5,21 +5,24 @@ from tqdm import tqdm
 from p_tqdm import p_map
 from functools import partial
 
+
 class SensorData:
-    CSV_COLUMN_NAMES = ['SensorIndex', 'Timestamp', 'accX', 'accY', 'accZ']
+    CSV_COLUMN_NAMES = ["SensorIndex", "Timestamp", "accX", "accY", "accZ"]
 
     def __init__(self, root, file_name, fix_timestamp=False):
         self.file_name = file_name
         self.root = root
 
-        self.csv_path = root + '/' + file_name + '.csv'
+        self.csv_path = root + "/" + file_name + ".csv"
         self.raw_data = pd.read_csv(self.csv_path, names=SensorData.CSV_COLUMN_NAMES)
 
-        self.raw_data = self.raw_data.drop_duplicates(subset='Timestamp', keep='last')
+        self.raw_data = self.raw_data.drop_duplicates(subset="Timestamp", keep="last")
         self.raw_data.reset_index(inplace=True, drop=True)
 
-        self.sensor_data = self.raw_data[['accX', 'accY', 'accZ']].values
-        self.total_time_sec = ((self.raw_data['Timestamp'].iloc[-1] - self.raw_data['Timestamp'].iloc[0]) / 1000)
+        self.sensor_data = self.raw_data[["accX", "accY", "accZ"]].values
+        self.total_time_sec = (
+            self.raw_data["Timestamp"].iloc[-1] - self.raw_data["Timestamp"].iloc[0]
+        ) / 1000
         self.sampling_rate = self.raw_data.shape[0] / self.total_time_sec
 
         # Fix timestamp jerk caused by BLE communication.
@@ -30,7 +33,7 @@ class SensorData:
         self.file_date = int(tmp[1] + tmp[2])
         self.file_time = int(tmp[3])
 
-        self.info_path = root + '/' + file_name + '.info'
+        self.info_path = root + "/" + file_name + ".info"
 
         with open(self.info_path) as f:
             read_line = f.readline()
@@ -57,9 +60,10 @@ class SensorData:
                 read_line = f.readline()
 
     def fix_timestamp(self):
-        t_stamp = self.raw_data['Timestamp']
-        self.raw_data['Timestamp'] = np.linspace(t_stamp[0], t_stamp[t_stamp.shape[0] - 1], t_stamp.shape[0],
-                                                 dtype='long')
+        t_stamp = self.raw_data["Timestamp"]
+        self.raw_data["Timestamp"] = np.linspace(
+            t_stamp[0], t_stamp[t_stamp.shape[0] - 1], t_stamp.shape[0], dtype="long"
+        )
 
     def get_x(self):
         return self.raw_data["Timestamp"].values
@@ -68,14 +72,24 @@ class SensorData:
         return self.get_x() - self.get_x()[0]
 
     def print_user_info(self):
-        print("NickName : ", self.user_nick_name, ", "
-                                                       "WorkoutExperience : ", self.user_workout_experience, "month, ",
-                   "Gender : ", self.user_gender, ", BirthYear : ", self.user_birth_year, ", "
-                                                                                          "Weight : ", self.user_weight,
-                   ", Height : ", self.user_height, sep="")
+        print(
+            "NickName : ",
+            self.user_nick_name,
+            ", " "WorkoutExperience : ",
+            self.user_workout_experience,
+            "month, ",
+            "Gender : ",
+            self.user_gender,
+            ", BirthYear : ",
+            self.user_birth_year,
+            ", " "Weight : ",
+            self.user_weight,
+            ", Height : ",
+            self.user_height,
+            sep="",
+        )
 
     def print_path(self):
-
         if issubclass(type(self), WorkoutSegment):
             print("WORKOUT!!!")
         elif issubclass(type(self), RestSegment):
@@ -83,7 +97,7 @@ class SensorData:
         elif issubclass(type(self), WholeSession):
             print("WHOLE!!")
 
-        print('csv :', self.csv_path)
+        print("csv :", self.csv_path)
         print(self.raw_data.head())
         print(self.sampling_rate)
 
@@ -100,8 +114,16 @@ class WorkoutSegment(SensorData):
         del self.info_not_processed
 
     def print_workout_info(self):
-        print(self.info_path, "::", self.workout_class_number, ":", self.workout_class_name, " :: ",
-                   self.repetition_number, sep="")
+        print(
+            self.info_path,
+            "::",
+            self.workout_class_number,
+            ":",
+            self.workout_class_name,
+            " :: ",
+            self.repetition_number,
+            sep="",
+        )
 
 
 class RestSegment(SensorData):
@@ -129,8 +151,14 @@ class WholeSession(SensorData):
             sensor_annotate = self.annotate_data.loc[sensor_index]["SensorIndex"]
 
             if verbose > 3:
-                print("Sensor data annotation", sensor_annotate, is_workout, self.file_name,
-                           self.raw_data["Timestamp"].iloc[sensor_index], is_workout)
+                print(
+                    "Sensor data annotation",
+                    sensor_annotate,
+                    is_workout,
+                    self.file_name,
+                    self.raw_data["Timestamp"].iloc[sensor_index],
+                    is_workout,
+                )
 
             if sensor_annotate == -1 and not is_workout:
                 is_workout = True
@@ -139,8 +167,14 @@ class WholeSession(SensorData):
                 is_workout = False
                 self.workout_state[workout_start_index:sensor_index] = 1
             else:
-                raise Exception("Sensor data annotation error!", sensor_annotate, is_workout, self.file_name,
-                                self.raw_data["Timestamp"].iloc[sensor_index], is_workout)
+                raise Exception(
+                    "Sensor data annotation error!",
+                    sensor_annotate,
+                    is_workout,
+                    self.file_name,
+                    self.raw_data["Timestamp"].iloc[sensor_index],
+                    is_workout,
+                )
 
         self.workout_state = np.delete(self.workout_state, self.annotate_data.index)
         self.sensor_data = np.delete(self.sensor_data, self.annotate_data.index, axis=0)
@@ -172,9 +206,9 @@ class SessionData:
         self.workout_segments = []
 
         for info in file_info:
-            if info[4] == 'rest':
+            if info[4] == "rest":
                 self.rest_segments.append(RestSegment(info[0], info[1]))
-            elif info[4] == 'whole':
+            elif info[4] == "whole":
                 self.whole_session = WholeSession(info[0], info[1], verbose=verbose)
             else:
                 w_data = WorkoutSegment(info[0], info[1])
@@ -187,20 +221,33 @@ class SessionData:
         remove_list = []
         for data in self.workout_segments:
             if data.repetition_number <= 1:
-                tstamp = data.raw_data['Timestamp']
+                tstamp = data.raw_data["Timestamp"]
                 tstamp_session = self.whole_session.raw_data["Timestamp"]
                 start_t = tstamp[0]
                 end_t = tstamp[tstamp.shape[0] - 1]
                 tstamp_index = tstamp_session[
-                    np.logical_and((tstamp_session >= start_t), (tstamp_session <= end_t))].index
+                    np.logical_and(
+                        (tstamp_session >= start_t), (tstamp_session <= end_t)
+                    )
+                ].index
 
-                self.whole_session.workout_state[tstamp_index[0]:tstamp_index[tstamp_index.shape[0] - 1] + 1] = 0
+                self.whole_session.workout_state[
+                    tstamp_index[0] : tstamp_index[tstamp_index.shape[0] - 1] + 1
+                ] = 0
 
-                delete_range = list(range(tstamp_index[0], tstamp_index[tstamp_index.shape[0] - 1] + 1))
+                delete_range = list(
+                    range(tstamp_index[0], tstamp_index[tstamp_index.shape[0] - 1] + 1)
+                )
 
-                self.whole_session.workout_state = np.delete(self.whole_session.workout_state, delete_range)
-                self.whole_session.sensor_data = np.delete(self.whole_session.sensor_data, delete_range, axis=0)
-                self.whole_session.raw_data = self.whole_session.raw_data.drop(delete_range).reset_index(drop=True)
+                self.whole_session.workout_state = np.delete(
+                    self.whole_session.workout_state, delete_range
+                )
+                self.whole_session.sensor_data = np.delete(
+                    self.whole_session.sensor_data, delete_range, axis=0
+                )
+                self.whole_session.raw_data = self.whole_session.raw_data.drop(
+                    delete_range
+                ).reset_index(drop=True)
 
                 remove_list.append(data)
 
@@ -209,10 +256,15 @@ class SessionData:
 
 
 class DataSetLoader:
-
-    def __init__(self, path, verbose=0, read_smallset=False, n_smallset=5,
-                 drop_lack_workout_type=False, multiprocess=True):
-
+    def __init__(
+        self,
+        path,
+        verbose=0,
+        read_smallset=False,
+        n_smallset=5,
+        drop_lack_workout_type=False,
+        multiprocess=True,
+    ):
         self.root_path = path
         self.verbose = verbose
 
@@ -236,18 +288,35 @@ class DataSetLoader:
 
         self.datasets = []
         if self.verbose > 0:
-            print("... Reading {} datasets from {} subjects ...".format(len(merged_info), len(self.unique_names)))
+            print(
+                "... Reading {} datasets from {} subjects ...".format(
+                    len(merged_info), len(self.unique_names)
+                )
+            )
 
-        loading_infos = [info for info in merged_info if info[0][2].lower() in self.unique_names]
-        loading_msg = "Reading {} datasets from {} subjects ...".format(len(merged_info), len(self.unique_names))
+        loading_infos = [
+            info for info in merged_info if info[0][2].lower() in self.unique_names
+        ]
+        loading_msg = "Reading {} datasets from {} subjects ...".format(
+            len(merged_info), len(self.unique_names)
+        )
 
         if multiprocess:
-            self.datasets = p_map(partial(SessionData, verbose=verbose), loading_infos, desc=loading_msg)
+            self.datasets = p_map(
+                partial(SessionData, verbose=verbose), loading_infos, desc=loading_msg
+            )
         else:
-            self.datasets = [SessionData(info, verbose=verbose) for info in tqdm(loading_infos, desc=loading_msg)]
+            self.datasets = [
+                SessionData(info, verbose=verbose)
+                for info in tqdm(loading_infos, desc=loading_msg)
+            ]
 
         if self.verbose > 0:
-            print("... Done Reading {} datasets from {} subjects!".format(len(self.datasets), len(self.unique_names)))
+            print(
+                "... Done Reading {} datasets from {} subjects!".format(
+                    len(self.datasets), len(self.unique_names)
+                )
+            )
 
         # Dropping the session data that does not contain every 15 workout types
         if drop_lack_workout_type:
@@ -280,9 +349,9 @@ class DataSetLoader:
             print("Done reading dataset!")
 
     def get_training_test_sets(self, cv_idx=0, n_cv=6):
-        n_test = (len(self.unique_names) // n_cv)
+        n_test = len(self.unique_names) // n_cv
 
-        test_idx = [i for i in range(cv_idx*n_test, (cv_idx+1)*n_test)]
+        test_idx = [i for i in range(cv_idx * n_test, (cv_idx + 1) * n_test)]
         test_set = []
         training_set = []
 
@@ -296,7 +365,10 @@ class DataSetLoader:
 
         if self.verbose > 0:
             print("Testing index : %s" % test_idx)
-            print("Training, Testing Length : (%02d, %02d)" % (len(training_set), len(test_set)))
+            print(
+                "Training, Testing Length : (%02d, %02d)"
+                % (len(training_set), len(test_set))
+            )
 
         return training_set, test_set
 
@@ -322,7 +394,9 @@ class DataSetLoader:
 
         merged_info = []
         for unique_name in unique_set:
-            unique_index = [i for i in range(len(file_names)) if file_names[i] == unique_name]
+            unique_index = [
+                i for i in range(len(file_names)) if file_names[i] == unique_name
+            ]
 
             info_set = []
             for index in unique_index:
@@ -342,7 +416,7 @@ class DataSetLoader:
         for root, dirs, files in dir_list:
             for file in files:
                 name, ext = os.path.splitext(file)
-                if ext.endswith('csv'):
+                if ext.endswith("csv"):
                     user, date, file_type = DataSetLoader.get_file_name_info(name)
                     data_path_set.append([root, name, user, date, file_type])
 
