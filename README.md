@@ -126,3 +126,22 @@
 	- Workout type number,Workout type name, Repetition number
 - **rest.info**
 	- Basic Columns
+
+
+## Citation
+
+If you use this dataset in your research, please cite the following paper:
+
+**Jongkuk Lim, Youngmin Oh, and Younggeun Choi,** "uLift: Adaptive Workout Tracker Using a Single Wrist-Worn Accelerometer," *IEEE Access*, vol. 12, pp. 21710-21722, 2024. [DOI: 10.1109/ACCESS.2024.3363437](https://ieeexplore.ieee.org/document/10423644)
+
+```bibtex
+@ARTICLE{10423644,
+  author={Lim, Jongkuk and Oh, Youngmin and Choi, Younggeun},
+  journal={IEEE Access}, 
+  title={uLift: Adaptive Workout Tracker Using a Single Wrist-Worn Accelerometer}, 
+  year={2024},
+  volume={12},
+  number={},
+  pages={21710-21722},
+  doi={10.1109/ACCESS.2024.3363437}}
+```
