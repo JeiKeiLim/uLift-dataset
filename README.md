@@ -1,10 +1,13 @@
 # uLift Anaerobic Workout Dataset
 
+This dataset is part of the [uLift paper](https://ieeexplore.ieee.org/document/10423644).
+The source code for the implementation is available at: [https://github.com/JeiKeiLim/uLift](https://github.com/JeiKeiLim/uLift)
+
+---
+
 <img src="https://raw.githubusercontent.com/JeiKeiLim/mygifcontainer/master/workout_dataset_gifs/13_burpee.gif"/>
 
 [See all 15 workout gifs (59.2 MB)](./docs/workout_types.md)
-
-This dataset is part of the uLift paper. The source code for the implementation is available at: [https://github.com/JeiKeiLim/uLift](https://github.com/JeiKeiLim/uLift)
 
 ---
 
