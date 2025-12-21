@@ -2,19 +2,23 @@
 
 <img src="https://raw.githubusercontent.com/JeiKeiLim/mygifcontainer/master/workout_dataset_gifs/13_burpee.gif"/>
 
-[See all 15 workout gifs(59.2 MB)](./docs/workout_types.md)
+[See all 15 workout gifs (59.2 MB)](./docs/workout_types.md)
+
+This dataset is part of the uLift paper. The source code for the implementation is available at: [https://github.com/JeiKeiLim/uLift](https://github.com/JeiKeiLim/uLift)
+
+---
 
 # 1. Contents
 ## 1.1 Sensor Type
-- 3-aixs acceleromter sensor data
+- 3-axis accelerometer sensor data
 
-## 1.2 Basic contents
+## 1.2 Basic Contents
 1. Whole session data
 2. Annotation for each workout and rest
-3. Annotation for the workout type and the number of repetition
+3. Annotation for the workout type and the number of repetitions
 4. Segmented data for each workout and rest
 
-## 1.2 Collected Workout Name and Class Number
+## 1.3 Collected Workout Name and Class Number
 |Class Number|Workout Name|
 |------------|------------|
 |00|SQUAT|
@@ -34,7 +38,7 @@
 |14|LATERAL_RAISE|
 
 
-## 1.3 Dataset description
+## 1.4 Dataset Description
 <img src="https://raw.githubusercontent.com/JeiKeiLim/mygifcontainer/master/workout_dataset_gifs/dataset_description.png"/>
 
 |||
